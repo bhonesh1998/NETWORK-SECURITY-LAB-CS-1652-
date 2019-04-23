@@ -1,0 +1,34 @@
+ 
+; login local 
+R1(config)#aaa new-model
+    R1(config)#aaa authentication login default local
+    R1(config)#line console 0
+    R1(config-line)#login authentication default
+
+R1(config)#ip domain-name ccnasecurity.com
+     R1(config)#crypto key generate rsa
+     Enter 1024 on prompt
+    R1(config)#aaa authentication login SSH-LOGIN local
+
+R1(config)#line vty 0 4
+    R1(config-line)#transport input ssh
+    R1(config-line)#login authentication SSH-LOGIN
+
+; 
+Add network configuration entry.
+   Client Name: R2
+   Client IP: 192.168.2.1
+   Secret: tacacspass
+   Choose Server type as TACACS
+   Click Add button
+ 
+  On the service by clicking ON radio button near Service label
+   Configure the AAA TACACS server IP address and secret key on R2
+   R2(config)#tacacs-server host 192.168.2.2
+   R2(config)#tacacs-server key tacacspass
+
+   Configure AAA login authentication for console access on R2.
+   R2(config)#aaa new-model
+   R2(config)#aaa authentication login default group tacacs+ local
+   R2(config)#line console 0
+   R2(config-line)#login authentication default
